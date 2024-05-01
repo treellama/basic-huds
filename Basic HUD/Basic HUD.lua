@@ -218,15 +218,14 @@ function Triggers.resize()
   -- calculate HUD area
   hud_rect = {}
   local hudsize = Screen.hud_size_preference
---  if hudsize == SizePreferences["normal"] then
-    hud_rect.width = 640
---  elseif hudsize == SizePreferences["double"] then
---    if wh >= 960 and ww >= 1280 then
---      hud_rect.width = 1280
---    end
---  elseif hudsize == SizePreferences["largest"] then
---    hud_rect.width = math.min(ww, math.max(640, (4 * wh) / 3));
---  end
+  hud_rect.width = 640
+  if hudsize == SizePreferences["double"] then
+    if ww >= 2560 then
+      hud_rect.width = 1280
+    end
+  elseif hudsize == SizePreferences["largest"] then
+     hud_rect.width = ww / 2
+  end
   
   hud_rect.height = hud_rect.width / 4
 --  hud_rect.x = math.floor((ww - hud_rect.width) / 2)
@@ -234,28 +233,29 @@ function Triggers.resize()
 
   hud_rect.scale = hud_rect.width / 640
 
---  hud_rect.x = ww - hud_rect.width
---  hud_rect.y = wh - hud_rect.height
+  hud_rect.x = ww - hud_rect.width
+  hud_rect.y = wh - hud_rect.height
 
-  local iw_right = math.max(InterfaceRects["inventory"].x + InterfaceRects["inventory"].width * hud_rect.scale, InterfaceRects["weapon display"].x + InterfaceRects["weapon display"].width * hud_rect.scale)
-  local iw_bottom = math.max(InterfaceRects["inventory"].y - 320 + InterfaceRects["inventory"].height * hud_rect.scale, InterfaceRects["weapon display"].y - 320 + InterfaceRects["weapon display"].height * hud_rect.scale)
+--  hud_rect.x = hud_rect.x + hud_rect.width - adj(InterfaceRects["inventory"].width) - adj(InterfaceRects["inventory"].x) - adj(InterfaceRects["weapon display"].width)
 
-  hud_rect.x = ww - iw_right
-  hud_rect.y = wh - iw_bottom
+  local iw_right = math.max(InterfaceRects["inventory"].x + InterfaceRects["inventory"].width, InterfaceRects["weapon display"].x + InterfaceRects["weapon display"].width)
+  local iw_bottom = math.max(InterfaceRects["inventory"].y - 320 + InterfaceRects["inventory"].height, InterfaceRects["weapon display"].y - 320 + InterfaceRects["weapon display"].height)
 
-  -- remove HUD height from rest of calculations
-  wh = hud_rect.y
-  
+  hud_rect.x = ww - adj(iw_right)
+  hud_rect.y = wh - adj(iw_bottom)
+
+  local sidelen = adj(123)
+
   -- calculate terminal area
   local termsize = Screen.term_size_preference
   if termsize == SizePreferences["normal"] then
     Screen.term_rect.width = 640
   elseif termsize == SizePreferences["double"] then
-    if wh >= 640 and ww >= 1280 then
+     if (wh - sidelen * 2) >= 640 and ww >= 1280 then
       Screen.term_rect.width = 1280
     end
   elseif termsize == SizePreferences["largest"] then
-    Screen.term_rect.width = math.min(ww, math.max(640, 2 * wh))
+     Screen.term_rect.width = math.min(ww, math.max(640, 2 * (wh - sidelen * 2)))
   end
   
   Screen.term_rect.height = Screen.term_rect.width / 2
