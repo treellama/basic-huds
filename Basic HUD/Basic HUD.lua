@@ -54,8 +54,8 @@ function Triggers.draw()
     local fg = InterfaceColors["inventory text"]
     local bg = InterfaceColors["inventory background"]
 
-    Screen.fill_rect(x - 2, y - 2, w + 2, h, bg)
-    Screen.fill_rect(x - 2, y, w, h, bg)
+    Screen.fill_rect(x - adj(2), y - adj(2), w + adj(2), h, bg)
+    Screen.fill_rect(x - adj(2), y, w, h, bg)
   end
   
   -- inventory
