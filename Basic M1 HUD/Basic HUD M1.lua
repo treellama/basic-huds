@@ -175,11 +175,11 @@ function Triggers.resize()
   local hudsize = Screen.hud_size_preference
   hud_rect.width = 640
   if hudsize == SizePreferences["double"] then
-    if wh >= 960 and ww >= 1280 then
+    if ww >= 2560 then
       hud_rect.width = 1280
     end
   elseif hudsize == SizePreferences["largest"] then
-    hud_rect.width = math.min(ww, math.max(640, (4 * wh) / 3));
+     hud_rect.width = ww / 2
   end
   
   hud_rect.height = hud_rect.width * 3 / 4
